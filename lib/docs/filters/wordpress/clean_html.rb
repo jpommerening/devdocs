@@ -2,15 +2,29 @@ module Docs
   class Wordpress
     class CleanHtmlFilter < Filter
       def call
-        root_page? ? root : other
+        if root_page?
+          root
+        elsif paged?
+          paged
+        else
+          other
+        end
         doc
+      end
+
+      def paged?
+        initial_page? || /\/page\/\d+\Z/ =~ subpath
       end
 
       def root
          # at_css('h2').content = 'WordPress'
       end
 
+      def paged
+      end
+
       def other
+        css('section.user-notes').remove
         # css('h1 + h2', '#_git + div', '#_git').remove
 
         # css('> div', 'pre > tt', 'pre > em', 'div.paragraph').each do |node|

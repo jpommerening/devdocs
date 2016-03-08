@@ -17,13 +17,12 @@ module Docs
 
     html_filters.push 'wordpress/clean_html', 'wordpress/entries'
 
-    options[:container] = ->(filter) { filter.root_page? ? '#main' : '#main article' }
-    options[:follow_links] = ->(filter) { filter.root_page? }
+    options[:container] = ->(filter) { ( filter.root_page? || filter.initial_page? ) ? '#main' : '#main article' }
     options[:only_patterns] = [
-      /\Afunctions/,
-      /\Ahooks/,
-      /\Aclasses/,
-      /\Amethods/]
+      /\Afunctions\/[^\/]+\/\Z/,
+      /\Ahooks\/[^\/]+\/\Z/,
+      /\Aclasses\/[^\/]+\/\Z/,
+      /\Amethods\/[^\/]+\/\Z/]
 
     options[:attribution] = <<-HTML
       &copy; 2016 WordPress, the contributors<br>
